@@ -3,15 +3,17 @@ using UnityEngine.InputSystem;
 
 public class Monster : MonoBehaviour
 {
+    public static Monster instance;
+
     [Header("Self")]
     Animator animator;
     AudioSource audioSource;
     int health = 3;
     [SerializeField]
-    int defaultHealth = 3;
+    int maxHealth = 3;
     float stamina = 100;
     [SerializeField]
-    float defaultStamina = 100;
+    float maxStamina = 100;
     [SerializeField]
     float staminaDecay = 10f;
     [SerializeField]
@@ -29,8 +31,6 @@ public class Monster : MonoBehaviour
     Vector3 movementVector;
 
     [Header("Interaction")]
-    bool canScreech;
-    bool canInteract;
     bool hidden;
 
     [SerializeField]
@@ -44,15 +44,27 @@ public class Monster : MonoBehaviour
     [SerializeField]
     float interactionRadius = 2f;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        health = defaultHealth;
+        health = maxHealth;
         speed = defaultSpeed;
-        stamina = defaultStamina;
+        stamina = maxStamina;
     }
 
     void Update()
@@ -67,41 +79,30 @@ public class Monster : MonoBehaviour
             } 
             else if (sprinting)
             {
-                stamina = Mathf.Clamp(stamina - (staminaDecay * Time.deltaTime), 0, defaultStamina);
+                stamina = Mathf.Clamp(stamina - (staminaDecay * Time.deltaTime), 0, maxStamina);
             }
             else
             {
-                stamina = Mathf.Clamp(stamina + (staminaRecovery * Time.deltaTime), 0, defaultStamina);
+                stamina = Mathf.Clamp(stamina + (staminaRecovery * Time.deltaTime), 0, maxStamina);
             }
             #endregion
 
             // Screech
             if(screechCooldown > 0)
             {
-                screechCooldown -= 1 * Time.deltaTime;
+                screechCooldown -= Time.deltaTime;
             }
 
             // Interact
             if(interactCooldown > 0)
             {
-                interactCooldown -= 1 * Time.deltaTime;
+                interactCooldown -= Time.deltaTime;
             }
 
             // Health
             if(health <= 0)
             {
-                if(GameManager.instance.CheckTownieCount() == 0)
-                {
-                    GameManager.instance.UpdateGameCondition(GameManager.GameState.savedAll);
-                }
-                else if(GameManager.instance.CheckTownieCount() == GameManager.instance.DefaultPopulation)
-                {
-                    GameManager.instance.UpdateGameCondition(GameManager.GameState.savedNone);
-                }
-                else
-                {
-                    GameManager.instance.UpdateGameCondition(GameManager.GameState.savedSome);
-                }
+                GameManager.instance.MonsterDead = true;
             }
 
         }
@@ -113,6 +114,52 @@ public class Monster : MonoBehaviour
         {
             rb.AddForce(movementVector * speed);
         }
+    }
+
+    public float Health
+    {
+        get { return  health; }
+    }
+
+    public float MaxHealth
+    {
+        get { return  health; }
+    }
+
+    public float Stamina
+    {
+        get { return  stamina; }
+    }
+
+    public float MaxStamina
+    {
+        get { return  maxStamina; }
+    }
+
+    public float ScreechCooldown
+    {
+        get { return screechCooldown; }
+    }
+
+    public float ScreechBuffer
+    {
+        get { return screechBuffer; }
+    }
+
+    public float InteractCooldown
+    {
+        get { return interactCooldown; }
+    }
+
+    public float InteractBuffer
+    {
+        get { return interactBuffer; }
+    }
+
+
+    public bool Hidden
+    {
+        get { return hidden; }
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -132,7 +179,6 @@ public class Monster : MonoBehaviour
 
             foreach (var collider in colliders)
             {
-                Debug.Log($"{collider.gameObject.name} is nearby");
                 if (collider.GetComponent<HidePoint>())
                 {
                     Hide();
@@ -185,7 +231,7 @@ public class Monster : MonoBehaviour
                 {
                     if (collider.GetComponent<Townie>())
                     {
-                        collider.GetComponent<Townie>().Lure(transform.position);
+                        collider.GetComponent<Townie>().TriggerLure(transform.position);
                     }
                 }
 
@@ -224,4 +270,23 @@ public class Monster : MonoBehaviour
         }
     }
 
+
+    public void Pause(InputAction.CallbackContext context)
+    {
+        if (GameManager.instance.CheckGamePlaying() && context.performed)
+        {
+            GameManager.instance.UpdateGameCondition(GameManager.GameState.pause);
+        }
+    }
+
+    public void Quit(InputAction.CallbackContext context)
+    {
+        GameManager.instance.UpdateGameCondition(GameManager.GameState.mainmenu);
+        Application.Quit();
+    }
+
+    public void Hit()
+    {
+        health--;
+    }
 }
