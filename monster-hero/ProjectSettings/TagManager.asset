@@ -11,6 +11,7 @@ TagManager:
   - FleePoint
   - PatrolPoint
   - Obstacle
+  - Environment
   layers:
   - Default
   - TransparentFX

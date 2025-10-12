@@ -17,14 +17,14 @@ public class Townie : MonoBehaviour
 
     float cooldown;
 
-    // Idle Var
-    [SerializeField]
-    float idleDuration = 5f;
-
     // Roaming Var
     [SerializeField]
     PatrolPoint[] patrolRoute;
     int nextPosition;
+
+    // Idle Var
+    [SerializeField]
+    float idleDuration = 5f;
 
     // Lured Var
     [SerializeField]
@@ -34,15 +34,10 @@ public class Townie : MonoBehaviour
     [SerializeField]
     float attackDuration = 5f;
 
-    private void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-    }
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -110,11 +105,38 @@ public class Townie : MonoBehaviour
             case TownieState.idle:
                 {
                     currentState = TownieState.idle;
+
+                    cooldown = idleDuration;
+                    patrolRoute[nextPosition].isOccupied = true;
                     break;
                 }
-
-            default:
+            case TownieState.roaming:
                 {
+                    currentState = TownieState.roaming;
+
+                    patrolRoute[nextPosition].isOccupied = false;
+                    UpdateRoamPosition();
+                    break;
+                }
+            case TownieState.lured:
+                {
+                    currentState = TownieState.lured;
+
+                    cooldown = luredDuration;
+                    break;
+                }
+            case TownieState.fleeing:
+                {
+                    currentState = TownieState.fleeing;
+
+                    walkTowards = GameManager.instance.FleePoint.position;
+                    break;
+                }
+            case TownieState.attacking:
+                {
+                    currentState = TownieState.attacking;
+
+                    walkTowards = GameManager.instance.Monster.transform.position;
                     break;
                 }
         }
@@ -124,8 +146,7 @@ public class Townie : MonoBehaviour
     {
         if(cooldown <= 0)
         {            
-            currentState = TownieState.roaming;
-            patrolRoute[nextPosition].isOccupied = false;
+            UpdateState(TownieState.roaming);
         }
         else
         {
@@ -137,10 +158,7 @@ public class Townie : MonoBehaviour
     {
         if(Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
         {
-            UpdateRoamPosition();
-            cooldown = idleDuration;
-            currentState = TownieState.idle;
-            patrolRoute[nextPosition].isOccupied = true;
+            UpdateState(TownieState.idle);
         }
         else
         {
@@ -154,15 +172,12 @@ public class Townie : MonoBehaviour
         {
             if (cooldown <= 0)
             {
-                currentState = TownieState.roaming;
+                UpdateState(TownieState.roaming);
             }
             else
             {
                 cooldown -= Time.deltaTime;
             }
-
-            UpdateRoamPosition();
-            currentState = TownieState.roaming;
         }
         else
         {
@@ -187,7 +202,7 @@ public class Townie : MonoBehaviour
     {
         if (!CheckForMonster())
         {
-            currentState = TownieState.roaming;
+            UpdateState(TownieState.roaming);
         }
         else if (Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
         {
@@ -198,7 +213,6 @@ public class Townie : MonoBehaviour
             else
             {
                 GameManager.instance.Monster.Hit();
-
                 cooldown = attackDuration;
             }
         }
@@ -215,14 +229,10 @@ public class Townie : MonoBehaviour
 
         foreach (var collider in colliders)
         {
-            if (collider.GetComponent<Monster>() && !collider.GetComponent<Monster>().Hidden)
+            if (collider.gameObject.GetComponent<Monster>() && !collider.GetComponent<Monster>().Hidden)
             {
                 TriggerAttack();
                 return true;
-            }
-            else
-            {
-                return false;
             }
         }
         return false;
@@ -230,7 +240,7 @@ public class Townie : MonoBehaviour
 
     void UpdateRoamPosition()
     {
-        if (nextPosition == patrolRoute.Length)
+        if (nextPosition + 1 == patrolRoute.Length)
         {
             nextPosition = 0;
         }
@@ -250,19 +260,16 @@ public class Townie : MonoBehaviour
     {
         UpdateState(TownieState.lured);
         walkTowards = target;
-        cooldown = luredDuration;
     }
 
     public void TriggerFlee()
     {
         UpdateState(TownieState.fleeing);
-        walkTowards = GameManager.instance.FleePoint.position;
     }
 
     public void TriggerAttack()
     {
         UpdateState(TownieState.attacking);
-        walkTowards = GameManager.instance.Monster.transform.position;
     }
 
 

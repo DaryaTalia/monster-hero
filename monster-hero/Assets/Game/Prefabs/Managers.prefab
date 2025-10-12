@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4761156131690424468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9074635382618987459}
+  - component: {fileID: 6181486625975029616}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9074635382618987459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761156131690424468}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.7344967, y: -0.30438912, z: 0.08926127}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6181486625975029616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761156131690424468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9499884a040e10c4fa8b0bfefc94ba1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  gameLimit: 420
+  environmentPrefab: {fileID: 5393493312449461268, guid: f3799c9036f83f1469b4e5cfc2d681f5, type: 3}
+  population: 0
+  gameName: Monster Hero
+  mainMenuPanel: {fileID: 0}
+  menuTitle: {fileID: 0}
+  menuBackButton: {fileID: 0}
+  howToPlayPanel: {fileID: 0}
+  creditsPanel: {fileID: 0}
+  gameEndScreen: {fileID: 0}
+  gameEndTitle: {fileID: 0}
+  gameEndText: {fileID: 0}
+  savedAllTitleText: All Townies Saved
+  savedAllBodyText: "The monster has saved all of the townspeople. \n\nThe cosmic
+    creature has come and gone, starving in its endless night. The townspeople now
+    look up to their strange, criptid friend.\n\nEnding 1/3"
+  savedSomeTitleText: Some Townies Have Been Lost
+  savedSomeBodyText: 'The monster didn''t save everyone.
+
+
+    The cosmic creature
+    has devoured some of the townspeople, and may return one day for more. Fear remains
+    in the hearts of those who remain.
+
+
+    Ending 2/3'
+  savedNoneTitleText: All Townies Have Been Lost
+  savedNoneBodyText: 'The monster saved no one.
+
+
+    The cosmic creature has devoured
+    the whole town. Echoes of their souls will linger here.
+
+
+    Ending 3/3'
+  gameplayHUD: {fileID: 0}
+  towniesRemainingText: {fileID: 0}
+  gameTimerText: {fileID: 0}
+  screechCooldownText: {fileID: 0}
+  interactCooldownText: {fileID: 0}
+  healthText: {fileID: 0}
+  staminaText: {fileID: 0}

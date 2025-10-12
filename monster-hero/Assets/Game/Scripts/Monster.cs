@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -44,6 +45,15 @@ public class Monster : MonoBehaviour
     [SerializeField]
     float interactionRadius = 2f;
 
+    [Header("World Space UI")]
+
+    [SerializeField]
+    GameObject screechText;
+    [SerializeField]
+    GameObject hurtText;
+    [SerializeField]
+    GameObject hideText;
+
     void Awake()
     {
         if (instance == null)
@@ -64,6 +74,11 @@ public class Monster : MonoBehaviour
 
         health = maxHealth;
         speed = defaultSpeed;
+
+        screechText.SetActive(false);
+        hurtText.SetActive(false);
+        hideText.SetActive(false);
+
         stamina = maxStamina;
     }
 
@@ -88,7 +103,7 @@ public class Monster : MonoBehaviour
             #endregion
 
             // Screech
-            if(screechCooldown > 0)
+            if (screechCooldown > 0)
             {
                 screechCooldown -= Time.deltaTime;
             }
@@ -123,7 +138,7 @@ public class Monster : MonoBehaviour
 
     public float MaxHealth
     {
-        get { return  health; }
+        get { return  maxHealth; }
     }
 
     public float Stamina
@@ -179,14 +194,14 @@ public class Monster : MonoBehaviour
 
             foreach (var collider in colliders)
             {
-                if (collider.GetComponent<HidePoint>())
+                if (collider.gameObject.GetComponent<HidePoint>())
                 {
                     Hide();
 
                     interactCooldown = interactBuffer;
                     return;
                 }
-                else if (collider.GetComponent<ScarePoint>())
+                else if (collider.gameObject.GetComponent<ScarePoint>())
                 {
                     collider.GetComponent<ScarePoint>().Activate();
                     Debug.Log("Activate Scare");
@@ -211,6 +226,7 @@ public class Monster : MonoBehaviour
             hidden = true;
             animator.SetBool("hidden", true);
             Debug.Log("Hidden");
+            StartCoroutine(HideTextTimer());
         }
     }
 
@@ -222,6 +238,7 @@ public class Monster : MonoBehaviour
             {
                 animator.SetTrigger("screech");
                 audioSource.Play();
+                StartCoroutine(ScreechTextTimer());
 
                 Debug.Log("Screech!!!!");
 
@@ -229,7 +246,7 @@ public class Monster : MonoBehaviour
 
                 foreach (var collider in colliders)
                 {
-                    if (collider.GetComponent<Townie>())
+                    if (collider.gameObject.GetComponent<Townie>())
                     {
                         collider.GetComponent<Townie>().TriggerLure(transform.position);
                     }
@@ -288,5 +305,27 @@ public class Monster : MonoBehaviour
     public void Hit()
     {
         health--;
+        StartCoroutine(HitTextTimer());
+    }
+
+    IEnumerator HitTextTimer()
+    {
+        hurtText.SetActive(true);
+        yield return new WaitForSeconds(3);
+        hurtText.SetActive(false);
+    }
+
+    IEnumerator ScreechTextTimer()
+    {
+        screechText.SetActive(true);
+        yield return new WaitForSeconds(3);
+        screechText.SetActive(false);
+    }
+
+    IEnumerator HideTextTimer()
+    {
+        hideText.SetActive(true);
+        yield return new WaitForSeconds(3);
+        hideText.SetActive(false);
     }
 }
