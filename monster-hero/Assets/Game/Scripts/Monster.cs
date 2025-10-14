@@ -72,14 +72,7 @@ public class Monster : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        health = maxHealth;
-        speed = defaultSpeed;
-
-        screechText.SetActive(false);
-        hurtText.SetActive(false);
-        hideText.SetActive(false);
-
-        stamina = maxStamina;
+        ResetMonster();
     }
 
     void Update()
@@ -172,6 +165,22 @@ public class Monster : MonoBehaviour
     }
 
 
+    public void ResetMonster()
+    {
+        health = maxHealth;
+        speed = defaultSpeed;
+
+        GameManager.instance.MonsterDead = false;
+
+        screechText.SetActive(false);
+        hurtText.SetActive(false);
+        hideText.SetActive(false);
+
+        stamina = maxStamina;
+
+        hidden = false;
+    }
+
     public bool Hidden
     {
         get { return hidden; }
@@ -186,7 +195,26 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void Interact(InputAction.CallbackContext context)
+    public void Scare(InputAction.CallbackContext context)
+    {
+        if (GameManager.instance.CheckGamePlaying() && context.performed)
+        {
+            var colliders = Physics2D.OverlapCircleAll(transform.position, interactionRadius);
+
+            foreach (var collider in colliders)
+            {
+                if (collider.gameObject.GetComponent<ScarePoint>())
+                {
+                    collider.GetComponent<ScarePoint>().Activate();
+                    Debug.Log("Activate Scare");
+
+                    interactCooldown = interactBuffer;
+                }
+            }
+        }
+    }
+
+    public void Hide(InputAction.CallbackContext context)
     {
         if (GameManager.instance.CheckGamePlaying() && context.performed)
         {
@@ -196,36 +224,30 @@ public class Monster : MonoBehaviour
             {
                 if (collider.gameObject.GetComponent<HidePoint>())
                 {
-                    Hide();
+                    ToggleHide();
 
                     interactCooldown = interactBuffer;
-                    return;
-                }
-                else if (collider.gameObject.GetComponent<ScarePoint>())
-                {
-                    collider.GetComponent<ScarePoint>().Activate();
-                    Debug.Log("Activate Scare");
-
-                    interactCooldown = interactBuffer;
-                    return;
                 }
             }
         }
     }
 
-    void Hide()
+    void ToggleHide()
     {
         if (hidden)
         {
             hidden = false;
             animator.SetBool("hidden", false);
+            GetComponent<BoxCollider2D>().isTrigger = true;
             Debug.Log("Visible");
         }
         else
         {
             hidden = true;
             animator.SetBool("hidden", true);
+            GetComponent<BoxCollider2D>().isTrigger = false;
             Debug.Log("Hidden");
+            screechText.SetActive(false);
             StartCoroutine(HideTextTimer());
         }
     }
@@ -238,6 +260,7 @@ public class Monster : MonoBehaviour
             {
                 animator.SetTrigger("screech");
                 audioSource.Play();
+        hideText.SetActive(false);
                 StartCoroutine(ScreechTextTimer());
 
                 Debug.Log("Screech!!!!");
@@ -302,6 +325,7 @@ public class Monster : MonoBehaviour
         Application.Quit();
     }
 
+
     public void Hit()
     {
         health--;
@@ -328,4 +352,5 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(3);
         hideText.SetActive(false);
     }
+
 }

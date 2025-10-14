@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public CinemachineVirtualCamera vCam;
+
 
     [Serializable]
     public enum GameState { mainmenu = 0, pause, howtoplay, credits, gameplay, savedAll, savedSome, savedNone, quit };
@@ -20,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     Monster monster;
     bool monsterDead;
+    Vector3 monsterSpawn;
 
     [Header("Townies")]
 
@@ -90,15 +95,15 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI gameTimerText;
 
     [SerializeField]
-    TextMeshProUGUI screechCooldownText;
+    Image healthFill;
+
     [SerializeField]
-    TextMeshProUGUI interactCooldownText;
+    Image staminaFill;
+
     [SerializeField]
-    TextMeshProUGUI healthText;
+    GameObject visibleImage;
     [SerializeField]
-    TextMeshProUGUI staminaText;
-    [SerializeField]
-    TextMeshProUGUI monsterHiddenText;
+    GameObject hiddenImage;
 
     #endregion
 
@@ -118,6 +123,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        monster = GameObject.FindGameObjectWithTag("Monster").GetComponent<Monster>();
+        monsterSpawn = monster.transform.position;
+
+        townies = new List<Townie>();
+
         ResetGame();
         UpdateGameCondition(currentState);
     }
@@ -158,20 +168,55 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        monster = GameObject.FindGameObjectWithTag("Monster").GetComponent<Monster>();
+        // Reset Monster
+
+        monster.ResetMonster();
+        monster.transform.position = monsterSpawn;
+
+        vCam.ForceCameraPosition(monsterSpawn, Quaternion.identity);
+
+        // Reset Environment
+
         fleePoint = GameObject.FindGameObjectWithTag("FleePoint").transform;
 
-        Destroy(GameObject.FindGameObjectWithTag("Environment"));
+        GameObject[] oldEnvironments = GameObject.FindGameObjectsWithTag("Environment");
+
+        foreach(GameObject go in oldEnvironments)
+        {
+            Destroy(go);
+        }
+
+        GameObject[] scarePoints = GameObject.FindGameObjectsWithTag("ScarePoint");
+
+        foreach(GameObject go in scarePoints)
+        {
+            go.GetComponent<ScarePoint>().ResetScarePoint();
+        }
+
+        GameObject[] patrolPoints = GameObject.FindGameObjectsWithTag("PatrolPoint");
+
+        foreach(GameObject go in patrolPoints)
+        {
+            go.GetComponent<PatrolPoint>().isOccupied = false;
+        }
 
         Instantiate(environmentPrefab);
 
+        // Reset Townies
+
+        population = 0;
+        townies.Clear();
+
         GameObject[] t = GameObject.FindGameObjectsWithTag("Townie");
-        townies = new List<Townie>();
         foreach (GameObject _t in t)
         {
             townies.Add(_t.GetComponent<Townie>());
         }
         population = townies.Count;
+
+        gameLimitTimer = 0;
+
+        UpdateGameCondition(GameState.mainmenu);
     }
 
     public int CheckTownieCount()
@@ -210,6 +255,7 @@ public class GameManager : MonoBehaviour
 
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
 
+                    menuBackButton.onClick.RemoveListener(() => ResetGame());
                     menuBackButton.gameObject.SetActive(false);
 
                     menuTitle.text = gameName;
@@ -259,6 +305,9 @@ public class GameManager : MonoBehaviour
                     mainMenuPanel.SetActive(false);
                     gameplayHUD.SetActive(true);
 
+                    visibleImage.SetActive(true);
+                    hiddenImage.SetActive(false);
+
                     menuBackButton.gameObject.SetActive(false);
 
                     break;
@@ -276,7 +325,7 @@ public class GameManager : MonoBehaviour
                     menuBackButton.gameObject.SetActive(true);
 
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
-                    ResetGame();
+                    menuBackButton.onClick.AddListener(() => ResetGame());
 
                     break;
                 }
@@ -293,7 +342,7 @@ public class GameManager : MonoBehaviour
                     menuBackButton.gameObject.SetActive(true);
 
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
-                    ResetGame();
+                    menuBackButton.onClick.AddListener(() => ResetGame());
 
                     break;
                 }
@@ -310,7 +359,7 @@ public class GameManager : MonoBehaviour
                     menuBackButton.gameObject.SetActive(true);
 
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
-                    ResetGame();
+                    menuBackButton.onClick.AddListener(() => ResetGame());
 
                     break;
                 }
@@ -363,23 +412,18 @@ public class GameManager : MonoBehaviour
         int timer = (int)gameLimitTimer;
         gameTimerText.text = "Time Limit: " + timer + "/" + gameLimit;
 
-        int screech = (int)monster.ScreechCooldown;
-        screechCooldownText.text = "Screech: " + screech + "/" + monster.ScreechBuffer;
-
-        int interact = (int)monster.InteractCooldown;
-        interactCooldownText.text = "Interact: " + interact + "/" + monster.InteractBuffer;
-
-        healthText.text = "Health: " + monster.Health + "/" + monster.MaxHealth;
-
-        int stamina = (int)monster.Stamina;
-        staminaText.text = "Stamina: " + stamina + "/" + monster.MaxStamina;
-
         if (monster.Hidden)
         {
-            monsterHiddenText.text = "Hidden";
-        } else
+            visibleImage.SetActive(false);
+            hiddenImage.SetActive(true);
+        } 
+        else
         {
-            monsterHiddenText.text = "Visible";
+            visibleImage.SetActive(true);
+            hiddenImage.SetActive(false);
         }
+
+        healthFill.fillAmount = monster.Health / monster.MaxHealth;
+        staminaFill.fillAmount = monster.Stamina / monster.MaxStamina;
     }
 }

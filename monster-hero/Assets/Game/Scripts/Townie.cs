@@ -34,16 +34,42 @@ public class Townie : MonoBehaviour
     [SerializeField]
     float attackDuration = 5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Audio")]
+    AudioSource townieAudio;
+    [SerializeField]
+    AudioClip[] grassSteps;
+    [SerializeField]
+    AudioClip[] stoneSteps;
+
+    int footstepIndex;
+
+    [SerializeField]
+    float footstepSpeed = 1.5f;
+    float footstepCounter;
+
+    [SerializeField]
+    float minPitchDeviation = .5f;
+    [SerializeField]
+    float maxPitchDeviation = .5f;
+    float defaultPitch;
+
+    [SerializeField]
+    LayerMask grassLayer;
+    [SerializeField]
+    LayerMask stoneLayer;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        agent.stoppingDistance = distanceThreshold;
+
+        townieAudio = GetComponent<AudioSource>();
+        defaultPitch = townieAudio.pitch;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (GameManager.instance.CheckGamePlaying())
@@ -229,7 +255,7 @@ public class Townie : MonoBehaviour
 
         foreach (var collider in colliders)
         {
-            if (collider.gameObject.GetComponent<Monster>() && !collider.GetComponent<Monster>().Hidden)
+            if (collider.gameObject.GetComponent<Monster>() && !collider.GetComponent<Monster>().Hidden && currentState != TownieState.fleeing)
             {
                 TriggerAttack();
                 return true;
@@ -270,6 +296,60 @@ public class Townie : MonoBehaviour
     public void TriggerAttack()
     {
         UpdateState(TownieState.attacking);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (GameManager.instance.CheckGamePlaying() && currentState != TownieState.idle) //or use rb velocity > 0
+        {
+            if (footstepCounter >= footstepSpeed)
+            {
+                // Footstep Audio
+                footstepCounter = 0;
+
+                if (collision.gameObject.layer == 1 << grassLayer)
+                {
+                    if (footstepIndex + 1 >= grassSteps.Length)
+                    {
+                        footstepIndex = 0;
+                    }
+                    else
+                    {
+                        footstepIndex++;
+                    }
+
+                    townieAudio.Stop();
+                    townieAudio.clip = grassSteps[footstepIndex];
+                    RandomizePitch();
+                    townieAudio.Play();
+                }
+                else if (collision.gameObject.layer == 1 << stoneLayer)
+                {
+                    if (footstepIndex + 1 >= stoneSteps.Length)
+                    {
+                        footstepIndex = 0;
+                    }
+                    else
+                    {
+                        footstepIndex++;
+                    }
+
+                    townieAudio.resource = stoneSteps[footstepIndex];
+                    RandomizePitch();
+                    townieAudio.Play();
+                }
+            }
+            else
+            {
+                footstepCounter += Time.deltaTime;
+            }
+        }
+
+    }
+
+    void RandomizePitch()
+    {
+        townieAudio.pitch = Random.Range(-minPitchDeviation, maxPitchDeviation) + defaultPitch;
     }
 
 

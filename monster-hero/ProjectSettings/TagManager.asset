@@ -16,13 +16,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Boundary
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Grass
+  - Stone
+  - Cosmic
+  - Townie
   - 
   - 
   - 
