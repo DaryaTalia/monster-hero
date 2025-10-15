@@ -9,6 +9,7 @@ public class Monster : MonoBehaviour
     [Header("Self")]
     Animator animator;
     AudioSource audioSource;
+    SpriteRenderer spriteRenderer;
     int health = 3;
     [SerializeField]
     int maxHealth = 3;
@@ -66,16 +67,12 @@ public class Monster : MonoBehaviour
         }
     }
 
-    void Start()
+    public void StartMonster()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
-
         ResetMonster();
     }
 
-    void Update()
+    public void UpdateMonster()
     {
         if (GameManager.instance.CheckGamePlaying())
         {
@@ -116,7 +113,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public void MonsterFixedUpdate()
     {
         if (GameManager.instance.CheckGamePlaying() && !hidden)
         {
@@ -167,6 +164,11 @@ public class Monster : MonoBehaviour
 
     public void ResetMonster()
     {
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         health = maxHealth;
         speed = defaultSpeed;
 
@@ -179,6 +181,9 @@ public class Monster : MonoBehaviour
         stamina = maxStamina;
 
         hidden = false;
+
+        rb.angularVelocity = 0;
+        rb.linearVelocity = Vector3.zero;
     }
 
     public bool Hidden
@@ -239,6 +244,7 @@ public class Monster : MonoBehaviour
             hidden = false;
             animator.SetBool("hidden", false);
             GetComponent<BoxCollider2D>().isTrigger = true;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
             Debug.Log("Visible");
         }
         else
@@ -246,6 +252,7 @@ public class Monster : MonoBehaviour
             hidden = true;
             animator.SetBool("hidden", true);
             GetComponent<BoxCollider2D>().isTrigger = false;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, .4f);
             Debug.Log("Hidden");
             screechText.SetActive(false);
             StartCoroutine(HideTextTimer());
@@ -313,9 +320,13 @@ public class Monster : MonoBehaviour
 
     public void Pause(InputAction.CallbackContext context)
     {
-        if (GameManager.instance.CheckGamePlaying() && context.performed)
+        if (GameManager.instance.currentState == GameManager.GameState.gameplay && context.performed)
         {
             GameManager.instance.UpdateGameCondition(GameManager.GameState.pause);
+        }
+        else if (GameManager.instance.currentState == GameManager.GameState.pause && context.performed)
+        {
+            GameManager.instance.UpdateGameCondition(GameManager.GameState.gameplay);
         }
     }
 

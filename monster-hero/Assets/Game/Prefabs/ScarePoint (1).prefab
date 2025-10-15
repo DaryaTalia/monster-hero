@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scareDuration: 15
-  scareRadius: 12
+  scareRadius: 8
   cooldownGO: {fileID: 6089436428138662200}
   cooldownText: {fileID: 8411029047787655670}
 --- !u!1 &6089436428138662200

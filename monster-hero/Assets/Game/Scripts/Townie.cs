@@ -15,6 +15,16 @@ public class Townie : MonoBehaviour
     [SerializeField]
     float sightRange = 3f;
 
+    float movementSpeed = 2f;
+    [SerializeField]
+    float defaultMovementSpeed = 2f;
+    [SerializeField]
+    float lureSpeedModifier = .7f;
+    [SerializeField]
+    float fleeSpeedModifier = 3f;
+    [SerializeField]
+    float attackSpeedModifier = 1.5f;
+
     float cooldown;
 
     // Roaming Var
@@ -58,7 +68,7 @@ public class Townie : MonoBehaviour
     [SerializeField]
     LayerMask stoneLayer;
 
-    void Start()
+    public void StartTownie()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
@@ -66,16 +76,20 @@ public class Townie : MonoBehaviour
         agent.updateUpAxis = false;
         agent.stoppingDistance = distanceThreshold;
 
+        movementSpeed = defaultMovementSpeed;
+        agent.speed = movementSpeed;
+
         townieAudio = GetComponent<AudioSource>();
         defaultPitch = townieAudio.pitch;
     }
 
-    void Update()
+    public void UpdateTownie()
     {
         if (GameManager.instance.CheckGamePlaying())
         {
             CheckForMonster();
             TownieMachine();
+            CalculateFootsteps();
         }
     }
 
@@ -140,6 +154,9 @@ public class Townie : MonoBehaviour
                 {
                     currentState = TownieState.roaming;
 
+                    movementSpeed = defaultMovementSpeed;
+                    agent.speed = movementSpeed;
+
                     patrolRoute[nextPosition].isOccupied = false;
                     UpdateRoamPosition();
                     break;
@@ -148,6 +165,9 @@ public class Townie : MonoBehaviour
                 {
                     currentState = TownieState.lured;
 
+                    movementSpeed = defaultMovementSpeed * lureSpeedModifier;
+                    agent.speed = movementSpeed;
+
                     cooldown = luredDuration;
                     break;
                 }
@@ -155,12 +175,18 @@ public class Townie : MonoBehaviour
                 {
                     currentState = TownieState.fleeing;
 
+                    movementSpeed = defaultMovementSpeed * fleeSpeedModifier;
+                    agent.speed = movementSpeed;
+
                     walkTowards = GameManager.instance.FleePoint.position;
                     break;
                 }
             case TownieState.attacking:
                 {
                     currentState = TownieState.attacking;
+
+                    movementSpeed = defaultMovementSpeed * attackSpeedModifier;
+                    agent.speed = movementSpeed;
 
                     walkTowards = GameManager.instance.Monster.transform.position;
                     break;
@@ -284,21 +310,30 @@ public class Townie : MonoBehaviour
 
     public void TriggerLure(Vector3 target)
     {
-        UpdateState(TownieState.lured);
-        walkTowards = target;
+        if(currentState != TownieState.fleeing)
+        {
+            UpdateState(TownieState.lured);
+            walkTowards = target;
+        }
     }
 
     public void TriggerFlee()
     {
-        UpdateState(TownieState.fleeing);
+        if (currentState != TownieState.fleeing)
+        {
+            UpdateState(TownieState.fleeing);
+        }
     }
 
     public void TriggerAttack()
     {
-        UpdateState(TownieState.attacking);
+        if (currentState != TownieState.fleeing)
+        {
+            UpdateState(TownieState.attacking);
+        }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    void CalculateFootsteps()
     {
         if (GameManager.instance.CheckGamePlaying() && currentState != TownieState.idle) //or use rb velocity > 0
         {
@@ -307,44 +342,48 @@ public class Townie : MonoBehaviour
                 // Footstep Audio
                 footstepCounter = 0;
 
-                if (collision.gameObject.layer == 1 << grassLayer)
-                {
-                    if (footstepIndex + 1 >= grassSteps.Length)
-                    {
-                        footstepIndex = 0;
-                    }
-                    else
-                    {
-                        footstepIndex++;
-                    }
+                var colliders = Physics2D.OverlapCircleAll(transform.position, 1);
 
-                    townieAudio.Stop();
-                    townieAudio.clip = grassSteps[footstepIndex];
-                    RandomizePitch();
-                    townieAudio.Play();
-                }
-                else if (collision.gameObject.layer == 1 << stoneLayer)
+                foreach (var collider in colliders)
                 {
-                    if (footstepIndex + 1 >= stoneSteps.Length)
+                    if (collider.gameObject.layer == Mathf.Log(grassLayer, 2))
                     {
-                        footstepIndex = 0;
-                    }
-                    else
-                    {
-                        footstepIndex++;
-                    }
+                        if (footstepIndex + 1 >= grassSteps.Length)
+                        {
+                            footstepIndex = 0;
+                        }
+                        else
+                        {
+                            footstepIndex++;
+                        }
 
-                    townieAudio.resource = stoneSteps[footstepIndex];
-                    RandomizePitch();
-                    townieAudio.Play();
-                }
+                        townieAudio.Stop();
+                        townieAudio.clip = grassSteps[footstepIndex];
+                        RandomizePitch();
+                        townieAudio.Play();
+                    }
+                    else if (collider.gameObject.layer == Mathf.Log(stoneLayer, 2))
+                    {
+                        if (footstepIndex + 1 >= stoneSteps.Length)
+                        {
+                            footstepIndex = 0;
+                        }
+                        else
+                        {
+                            footstepIndex++;
+                        }
+
+                        townieAudio.resource = stoneSteps[footstepIndex];
+                        RandomizePitch();
+                        townieAudio.Play();
+                    }
+                }                
             }
             else
             {
                 footstepCounter += Time.deltaTime;
             }
         }
-
     }
 
     void RandomizePitch()

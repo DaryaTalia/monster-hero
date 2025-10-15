@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 4652727798684140720}
   m_Layer: 0
   m_Name: GroundLayers
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 5784467516679597229}
   m_Layer: 0
   m_Name: Patrol Points
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -1639,7 +1639,7 @@ GameObject:
   - component: {fileID: 1372268724959781828}
   m_Layer: 0
   m_Name: Boundaries
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -1859,7 +1859,7 @@ GameObject:
   - component: {fileID: 1779041426774095222}
   m_Layer: 0
   m_Name: Townies
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2210,10 +2210,6 @@ PrefabInstance:
       value: Rose
       objectReference: {fileID: 0}
     - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: patrolRoute.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
       propertyPath: 'patrolRoute.Array.data[0]'
       value: 
       objectReference: {fileID: 7144948167031151880}
@@ -2300,10 +2296,6 @@ PrefabInstance:
       value: Harri
       objectReference: {fileID: 0}
     - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: patrolRoute.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
       propertyPath: 'patrolRoute.Array.data[0]'
       value: 
       objectReference: {fileID: 7202179319804773188}
@@ -2323,10 +2315,6 @@ PrefabInstance:
       propertyPath: 'patrolRoute.Array.data[4]'
       value: 
       objectReference: {fileID: 8828635521814342001}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: 'patrolRoute.Array.data[5]'
-      value: 
-      objectReference: {fileID: 5892837568844983983}
     - target: {fileID: 6451339417620130184, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.6930618
@@ -2472,10 +2460,6 @@ PrefabInstance:
       value: Lou
       objectReference: {fileID: 0}
     - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: patrolRoute.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
       propertyPath: 'patrolRoute.Array.data[0]'
       value: 
       objectReference: {fileID: 1181222966273702845}
@@ -2483,22 +2467,6 @@ PrefabInstance:
       propertyPath: 'patrolRoute.Array.data[1]'
       value: 
       objectReference: {fileID: 112225426006275712}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: 'patrolRoute.Array.data[2]'
-      value: 
-      objectReference: {fileID: 112225426006275712}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: 'patrolRoute.Array.data[3]'
-      value: 
-      objectReference: {fileID: 1181222966273702845}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: 'patrolRoute.Array.data[4]'
-      value: 
-      objectReference: {fileID: 8828635521814342001}
-    - target: {fileID: 6214508591386215949, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
-      propertyPath: 'patrolRoute.Array.data[5]'
-      value: 
-      objectReference: {fileID: 5892837568844983983}
     - target: {fileID: 6451339417620130184, guid: 15ff825491ce60a419b235c392471a5c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.6930618

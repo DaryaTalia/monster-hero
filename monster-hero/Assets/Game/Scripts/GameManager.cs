@@ -125,10 +125,10 @@ public class GameManager : MonoBehaviour
     {
         monster = GameObject.FindGameObjectWithTag("Monster").GetComponent<Monster>();
         monsterSpawn = monster.transform.position;
-
-        townies = new List<Townie>();
+        monster.StartMonster();
 
         ResetGame();
+
         UpdateGameCondition(currentState);
     }
 
@@ -137,8 +137,18 @@ public class GameManager : MonoBehaviour
         if (CheckGamePlaying()) 
         {
             CheckGameConditions();
+            monster.UpdateMonster();
+            foreach(Townie t in townies)
+            {
+                t.UpdateTownie();
+            }
             UpdateHUD();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        Monster.MonsterFixedUpdate();
     }
 
     public Monster Monster
@@ -205,12 +215,21 @@ public class GameManager : MonoBehaviour
         // Reset Townies
 
         population = 0;
-        townies.Clear();
+
+        if(townies != null)
+        {
+            townies.Clear();
+        }
+        else
+        {
+            townies = new List<Townie>();
+        }
 
         GameObject[] t = GameObject.FindGameObjectsWithTag("Townie");
         foreach (GameObject _t in t)
         {
             townies.Add(_t.GetComponent<Townie>());
+            _t.GetComponent<Townie>().StartTownie();
         }
         population = townies.Count;
 
@@ -327,6 +346,16 @@ public class GameManager : MonoBehaviour
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
                     menuBackButton.onClick.AddListener(() => ResetGame());
 
+                    GameObject[] oldEnvironments = GameObject.FindGameObjectsWithTag("Environment");
+
+                    foreach (GameObject go in oldEnvironments)
+                    {
+                        Destroy(go);
+                    }
+
+                    population = 0;
+                    townies.Clear();
+
                     break;
                 }
             case GameState.savedSome:
@@ -344,6 +373,16 @@ public class GameManager : MonoBehaviour
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
                     menuBackButton.onClick.AddListener(() => ResetGame());
 
+                    GameObject[] oldEnvironments = GameObject.FindGameObjectsWithTag("Environment");
+
+                    foreach (GameObject go in oldEnvironments)
+                    {
+                        Destroy(go);
+                    }
+
+                    population = 0;
+                    townies.Clear();
+
                     break;
                 }
             case GameState.savedNone:
@@ -360,6 +399,16 @@ public class GameManager : MonoBehaviour
 
                     menuBackButton.gameObject.GetComponent<GameStateComponent>().GameState = GameState.mainmenu;
                     menuBackButton.onClick.AddListener(() => ResetGame());
+
+                    GameObject[] oldEnvironments = GameObject.FindGameObjectsWithTag("Environment");
+
+                    foreach (GameObject go in oldEnvironments)
+                    {
+                        Destroy(go);
+                    }
+
+                    population = 0;
+                    townies.Clear();
 
                     break;
                 }
