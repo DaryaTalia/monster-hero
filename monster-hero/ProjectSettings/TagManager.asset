@@ -49,6 +49,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Surface
+    uniqueID: 563465169
+    locked: 0
+  - name: Shadow
+    uniqueID: 56451981
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1

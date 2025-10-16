@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,9 @@ public class ScarePoint : MonoBehaviour
     GameObject cooldownGO;
     [SerializeField]
     TextMeshProUGUI cooldownText;
+
+    [SerializeField]
+    Animator animator;
 
     private void Start()
     {
@@ -54,14 +58,23 @@ public class ScarePoint : MonoBehaviour
             countdown = scareDuration;
             cooldownGO.SetActive(true);
 
-            var colliders = Physics2D.OverlapCircleAll(transform.position, scareRadius);
+            StartCoroutine(Animate());
+        }
+    }
 
-            foreach (var collider in colliders)
+    IEnumerator Animate()
+    {
+        animator.SetTrigger("activated");
+
+        var colliders = Physics2D.OverlapCircleAll(transform.position, scareRadius);
+
+        yield return new WaitForSeconds(3);
+
+        foreach (var collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<Townie>())
             {
-                if (collider.gameObject.GetComponent<Townie>())
-                {
-                    collider.gameObject.GetComponent<Townie>().TriggerFlee();
-                }
+                collider.gameObject.GetComponent<Townie>().TriggerFlee();
             }
         }
     }
