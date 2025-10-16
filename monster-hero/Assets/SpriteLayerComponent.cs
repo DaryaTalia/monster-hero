@@ -23,6 +23,6 @@ public class SpriteLayerComponent : MonoBehaviour
 
     void UpdateSortingOrder()
     {
-        spriteRenderer.sortingOrder = (int)transform.position.y;
+        spriteRenderer.sortingOrder = -(int)transform.position.y;
     }
 }

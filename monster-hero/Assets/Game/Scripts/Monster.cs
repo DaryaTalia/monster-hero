@@ -74,42 +74,38 @@ public class Monster : MonoBehaviour
 
     public void UpdateMonster()
     {
-        if (GameManager.instance.CheckGamePlaying())
+        #region Sprinting
+        // Sprinting
+        if (sprinting && stamina <= 0)
         {
-            #region Sprinting
-            // Sprinting
-            if (sprinting && stamina <= 0)
-            {
-                StopSprint();
-            } 
-            else if (sprinting)
-            {
-                stamina = Mathf.Clamp(stamina - (staminaDecay * Time.deltaTime), 0, maxStamina);
-            }
-            else
-            {
-                stamina = Mathf.Clamp(stamina + (staminaRecovery * Time.deltaTime), 0, maxStamina);
-            }
-            #endregion
+            StopSprint();
+        }
+        else if (sprinting)
+        {
+            stamina = Mathf.Clamp(stamina - (staminaDecay * Time.deltaTime), 0, maxStamina);
+        }
+        else
+        {
+            stamina = Mathf.Clamp(stamina + (staminaRecovery * Time.deltaTime), 0, maxStamina);
+        }
+        #endregion
 
-            // Screech
-            if (screechCooldown > 0)
-            {
-                screechCooldown -= Time.deltaTime;
-            }
+        // Screech
+        if (screechCooldown > 0)
+        {
+            screechCooldown -= Time.deltaTime;
+        }
 
-            // Interact
-            if(interactCooldown > 0)
-            {
-                interactCooldown -= Time.deltaTime;
-            }
+        // Interact
+        if (interactCooldown > 0)
+        {
+            interactCooldown -= Time.deltaTime;
+        }
 
-            // Health
-            if(health <= 0)
-            {
-                GameManager.instance.MonsterDead = true;
-            }
-
+        // Health
+        if (health <= 0)
+        {
+            GameManager.instance.MonsterDead = true;
         }
     }
 

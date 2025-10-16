@@ -233,7 +233,7 @@ public class GameManager : MonoBehaviour
         }
         population = townies.Count;
 
-        gameLimitTimer = 0;
+        gameLimitTimer = gameLimit;
 
         UpdateGameCondition(GameState.mainmenu);
     }
@@ -433,7 +433,7 @@ public class GameManager : MonoBehaviour
 
     void CheckGameConditions()
     {
-        if(gameLimitTimer >= gameLimit || monsterDead || CheckTownieCount() == 0)
+        if(gameLimitTimer <= 0 || monsterDead || CheckTownieCount() == 0)
         {
             if (CheckTownieCount() == 0)
             {
@@ -450,7 +450,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            gameLimitTimer += Time.deltaTime;
+            gameLimitTimer -= Time.deltaTime;
         }
     }
 
@@ -459,7 +459,7 @@ public class GameManager : MonoBehaviour
         towniesRemainingText.text = "Townies Remaining: " + townies.Count;
 
         int timer = (int)gameLimitTimer;
-        gameTimerText.text = "Time Limit: " + timer + "/" + gameLimit;
+        gameTimerText.text = "Time: " + timer;
 
         if (monster.Hidden)
         {

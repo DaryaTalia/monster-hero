@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 6060471704240985909}
   - component: {fileID: 1998073317276454612}
   - component: {fileID: 3384712733624267858}
-  - component: {fileID: 6738485028308071006}
+  - component: {fileID: 957073022087944204}
+  - component: {fileID: 4005563269952152690}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3675348617239713188}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -30.767254, y: -1.3804585, z: -6.9047747}
+  m_LocalPosition: {x: -30.767254, y: -1.3804585, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -150,7 +151,23 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.6, y: 0.55}
   m_EdgeRadius: 0
---- !u!208 &6738485028308071006
+--- !u!114 &957073022087944204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3675348617239713188}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
+--- !u!208 &4005563269952152690
 NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,11 +177,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.845, y: 0.38, z: 0.1}
+  m_Extents: {x: 2.535, y: 2.545, z: 0.1}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: -0.23, y: -1.79, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
 --- !u!1001 &6643790077918515710
 PrefabInstance:

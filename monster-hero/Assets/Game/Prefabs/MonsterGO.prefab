@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859443018239523694}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -202,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a168c60bdf9160442abe972ab2ce5270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isStatic: 0
 --- !u!1 &2261379769454042727
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,7 +766,7 @@ Transform:
   m_GameObject: {fileID: 5547653734080702492}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.28, y: -15.87, z: 0}
+  m_LocalPosition: {x: 14.28, y: -15.87, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -792,7 +793,7 @@ MonoBehaviour:
   defaultSpeed: 5
   sprintMultiplier: 4
   sprinting: 0
-  screechRadius: 10
+  screechRadius: 20
   interactionRadius: 1
   screechText: {fileID: 8520193878126095561}
   hurtText: {fileID: 8911568612867602293}

@@ -85,12 +85,9 @@ public class Townie : MonoBehaviour
 
     public void UpdateTownie()
     {
-        if (GameManager.instance.CheckGamePlaying())
-        {
-            CheckForMonster();
-            TownieMachine();
-            CalculateFootsteps();
-        }
+        CheckForMonster();
+        TownieMachine();
+        CalculateFootsteps();
     }
 
     void TownieMachine()
@@ -129,13 +126,8 @@ public class Townie : MonoBehaviour
     {
         if (agent.isOnNavMesh)
         {
-            do
-            {
-                agent.SetDestination(walkTowards);
-            } 
-        
-            while (Vector3.Distance(walkTowards, transform.position) <= distanceThreshold);
-        }        
+            agent.SetDestination(walkTowards);
+        }
     }
 
     void UpdateState(TownieState newState)

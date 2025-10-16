@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9499884a040e10c4fa8b0bfefc94ba1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vCam: {fileID: 0}
   currentState: 0
-  gameLimit: 420
+  gameLimit: 300
   environmentPrefab: {fileID: 5393493312449461268, guid: f3799c9036f83f1469b4e5cfc2d681f5, type: 3}
   population: 0
   gameName: Monster Hero
@@ -83,7 +84,7 @@ MonoBehaviour:
   gameplayHUD: {fileID: 0}
   towniesRemainingText: {fileID: 0}
   gameTimerText: {fileID: 0}
-  screechCooldownText: {fileID: 0}
-  interactCooldownText: {fileID: 0}
-  healthText: {fileID: 0}
-  staminaText: {fileID: 0}
+  healthFill: {fileID: 0}
+  staminaFill: {fileID: 0}
+  visibleImage: {fileID: 0}
+  hiddenImage: {fileID: 0}
