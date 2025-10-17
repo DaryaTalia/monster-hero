@@ -257,7 +257,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  idleDuration: 5
+  idleDuration: 4
   luredDuration: 8
   attackDuration: 7
   grassSteps:

@@ -336,6 +336,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.25490198
       objectReference: {fileID: 0}
+    - target: {fileID: 3936510489313888612, guid: 687a75e9ae5bacd449b14ad25f446f7f, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 7531590748145071796}
     - target: {fileID: 5469121964965707274, guid: 687a75e9ae5bacd449b14ad25f446f7f, type: 3}
       propertyPath: m_Name
       value: ScarePoint

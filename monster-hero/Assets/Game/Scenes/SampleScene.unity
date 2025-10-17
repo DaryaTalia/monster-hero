@@ -237,7 +237,7 @@ Camera:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -763,7 +763,7 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 1
-    m_InheritPosition: 0
+    m_InheritPosition: 1
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls: []
@@ -944,7 +944,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   IgnoreTag: 
-  CameraRadius: 0.2
+  CameraRadius: 0.001
   DampingIntoCollision: 0
   DampingFromCollision: 2
 --- !u!114 &1848608749
@@ -959,10 +959,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
+  m_NoiseProfile: {fileID: 11400000, guid: a3dacaec0287d7444b4bd276816e1666, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 1
-  m_FrequencyGain: 1
+  m_AmplitudeGain: 0.5
+  m_FrequencyGain: 0.5
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &1848608750
 MonoBehaviour:
@@ -1382,7 +1382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1070965029003936889, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -66.1532
+      value: -66.385925
       objectReference: {fileID: 0}
     - target: {fileID: 1113240092979148784, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1426,7 +1426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1429023816782604575, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -38.79785
+      value: -38.914215
       objectReference: {fileID: 0}
     - target: {fileID: 1475094757217821718, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_hasFontAssetChanged
@@ -1778,7 +1778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6099239240462914109, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -103.58867
+      value: -103.97655
       objectReference: {fileID: 0}
     - target: {fileID: 6234765758211183094, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1850,7 +1850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6572252574813136240, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -116.393555
+      value: -116.742645
       objectReference: {fileID: 0}
     - target: {fileID: 6708778576086656030, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1958,7 +1958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7504462081343731065, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -23.717733
+      value: -23.79531
       objectReference: {fileID: 0}
     - target: {fileID: 7566072533661908895, guid: 7baff98b453c6254cbda2481d1b14c3e, type: 3}
       propertyPath: m_SizeDelta.x

@@ -210,6 +210,7 @@ public class Monster : MonoBehaviour
                     Debug.Log("Activate Scare");
 
                     interactCooldown = interactBuffer;
+                    return;
                 }
             }
         }
@@ -228,6 +229,7 @@ public class Monster : MonoBehaviour
                     ToggleHide();
 
                     interactCooldown = interactBuffer;
+                    return;
                 }
             }
         }

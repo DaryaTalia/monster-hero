@@ -184,6 +184,8 @@ public class Townie : MonoBehaviour
                     break;
                 }
         }
+
+        agent.ResetPath();
     }
 
     void Idle()
@@ -198,9 +200,14 @@ public class Townie : MonoBehaviour
         }
     }
 
+    bool CheckDistance()
+    {
+        return Vector2.Distance(transform.position, walkTowards) <= distanceThreshold;
+    }
+
     void Roam()
     {
-        if(Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
+        if(CheckDistance())
         {
             UpdateState(TownieState.idle);
         }
@@ -212,7 +219,7 @@ public class Townie : MonoBehaviour
 
     void Lure()
     {
-        if (Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
+        if (CheckDistance())
         {
             if (cooldown <= 0)
             {
@@ -231,7 +238,7 @@ public class Townie : MonoBehaviour
 
     void Flee()
     {
-        if (Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
+        if (CheckDistance())
         {
             GameManager.instance.Townies.Remove(this);
             Destroy(gameObject);
@@ -248,7 +255,7 @@ public class Townie : MonoBehaviour
         {
             UpdateState(TownieState.roaming);
         }
-        else if (Vector3.Distance(transform.position, walkTowards) <= distanceThreshold)
+        else if (CheckDistance())
         {
             if (cooldown > 0)
             {
